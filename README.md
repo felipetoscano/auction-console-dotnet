@@ -14,3 +14,11 @@ Definição de atributos do xUnit:
   - ex.: [InlineData("a", 0)] -> O método deve ser public void Teste(string v1, int v2)
 
 *Informações retiradas de documentações da Microsoft*
+
+TDD:
+
+O principal conceito que o TDD prega, é que devemos nos atentar aos testes ANTES da implementação do método em si, e seguindo a ordem como ilustrada na imagem abaixo:
+
+![image](https://user-images.githubusercontent.com/26116319/152895777-485f0fab-fa9d-4609-9368-c32a76098bd1.png)
+
+
