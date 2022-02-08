@@ -53,11 +53,19 @@ namespace Tests
             //Arranje
             var auction = new Auction("IPhone 13");
             var client1 = new Client("Felipe", auction);
+            var client2 = new Client("João", auction);
             auction.StartTrading();
 
-            foreach (var bidValue in bidsValues)
+            for (int i = 0; i < bidsValues.Length; i++)
             {
-                auction.ReceiveBid(client1, bidValue);
+                if((i%2) == 0)
+                {
+                    auction.ReceiveBid(client1, bidsValues[i]);
+                }
+                else
+                {
+                    auction.ReceiveBid(client2, bidsValues[i]);
+                }
             }
 
             //Act

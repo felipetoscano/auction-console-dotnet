@@ -47,7 +47,10 @@
 
             public void ReceiveBid(Auction auction, Client client, double valor)
             {
-                auction._bids.Add(new Bid(client, valor));
+                if(!auction.Bids.Any() || client.Name != auction._bids.Last().Client.Name)
+                {
+                    auction._bids.Add(new Bid(client, valor));
+                }
             }
 
             public void EndTrading(Auction auction)
