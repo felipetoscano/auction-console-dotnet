@@ -21,4 +21,7 @@ O principal conceito que o TDD prega, é que devemos nos atentar aos testes ANTE
 
 ![image](https://user-images.githubusercontent.com/26116319/152895777-485f0fab-fa9d-4609-9368-c32a76098bd1.png)
 
+*"E como vamos testar os métodos privados?"*
+
+A documentação da Microsoft diz que dificilmente precisaremos testar métodos privados, além de que estes métodos em algum momento deverão ser chamados por métodos públicos. Desta forma, testaremos o método privado testando o público mais "próximo" dele.
 
