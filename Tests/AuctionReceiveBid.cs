@@ -57,30 +57,5 @@ namespace Tests
 
             Assert.Equal(expected, actual);
         }
-
-        [Theory]
-        [InlineData(new double[] { 100 })]
-        [InlineData(new double[] { 100, 200 })]
-        [InlineData(new double[] { 100, 200, 300 })]
-        [InlineData(new double[] { 500, 250, 100 })]
-        public void IgnoreBidsGivenAuctionNotStarted(double[] bids)
-        {
-            //Arranje
-            var auction = new Auction("TV");
-            var client = new Client("João", auction);
-
-            //Act
-            foreach (var bid in bids)
-            {
-                auction.ReceiveBid(client, bid);
-            }
-            auction.EndTrading();
-
-            //Assert
-            Bid expected = null;
-            Bid actual = auction.WinnerBid;
-
-            Assert.Equal(expected, actual);
-        }
     }
 }

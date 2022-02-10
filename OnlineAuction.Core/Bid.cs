@@ -7,7 +7,11 @@
         public Bid(Client client, double value)
         {
             Client = client;
-            Value = value;
+
+            if (value >= 0)
+                Value = value;
+            else
+                throw new ArgumentException("Valor não pode ser negativo");
         }
     }
 }

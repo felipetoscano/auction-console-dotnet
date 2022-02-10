@@ -92,7 +92,7 @@
 
             public void EndTrading(Auction auction)
             {
-
+                throw new InvalidOperationException("Pregão deve ser iniciado antes");
             }
         }
     }

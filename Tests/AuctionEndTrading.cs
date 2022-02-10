@@ -1,4 +1,5 @@
 ﻿using OnlineAuction.Core;
+using System;
 using Xunit;
 
 namespace Tests
@@ -41,6 +42,36 @@ namespace Tests
 
             Assert.Equal(expected, actual);
             Assert.Equal(client3, auction.WinnerBid.Client);
+        }
+
+        [Fact]
+        public void ThrowInvalidOperationExceptionGivenAuctionEndedAndNotStarted()
+        {
+            //Arranje
+            var auction = new Auction("PS5");
+
+            /* Forma "Gambiarra"
+            try
+            {
+                //Act
+                auction.EndTrading();
+                Assert.True(false);
+            }
+            catch (Exception ex)
+            {
+                //Assert
+                Assert.IsType<InvalidOperationException>(ex);
+            }
+            */
+
+            //Assert
+            var exception = Assert.Throws<InvalidOperationException>(
+                //Act
+                () => auction.EndTrading());
+            
+            var actual = exception.Message;
+            var expected = "Pregão deve ser iniciado antes";
+            Assert.Equal(expected, actual);
         }
 
         [Theory]
