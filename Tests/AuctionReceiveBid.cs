@@ -1,4 +1,5 @@
 ﻿using OnlineAuction.Core;
+using OnlineAuction.Core.EvaluationModality;
 using System.Linq;
 using Xunit;
 
@@ -15,14 +16,15 @@ namespace Tests
          * Informações retiradas de documentações da Microsoft
          */
 
-        [Fact] 
+        [Fact]
         public void DoesNotAcceptNextBidGivenClientWithConsecutiveBids()
         {
             //Arranje
-            var auction = new Auction("TV");
+            var modality = new HighestValue();
+            var auction = new Auction("TV", modality);
             var client = new Client("João", auction);
             auction.StartTrading();
-            
+
             //Act
             auction.ReceiveBid(client, 400);
             auction.ReceiveBid(client, 500);
@@ -30,7 +32,7 @@ namespace Tests
 
             //Assert
             var expected = 1;
-            var actual = auction.Bids.Count();
+            var actual = auction.Bids.Count;
 
             Assert.Equal(expected, actual);
         }
@@ -39,7 +41,8 @@ namespace Tests
         public void DoesNotAllowNewBidsGivenAuctionEnded()
         {
             //Arranje
-            var auction = new Auction("TV");
+            var modality = new HighestValue();
+            var auction = new Auction("TV", modality);
             var client1 = new Client("João", auction);
             var client2 = new Client("Maria", auction);
             auction.StartTrading();
@@ -53,7 +56,7 @@ namespace Tests
 
             //Assert
             var expected = 3;
-            var actual = auction.Bids.Count();
+            var actual = auction.Bids.Count;
 
             Assert.Equal(expected, actual);
         }

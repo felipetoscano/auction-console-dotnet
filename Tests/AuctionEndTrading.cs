@@ -1,4 +1,5 @@
 ﻿using OnlineAuction.Core;
+using OnlineAuction.Core.EvaluationModality;
 using System;
 using Xunit;
 
@@ -15,11 +16,50 @@ namespace Tests
          * Informações retiradas de documentações da Microsoft
          */
 
+        [Theory]
+        [InlineData(1200, 1250, new double[] { 800, 1150, 1400, 1250 })]
+        [InlineData(1000, 1001, new double[] { 800, 1000, 1001, 1100 })]
+        [InlineData(800, 2000, new double[] { 2000, 3000, 5000, 10000 })]
+        public void ClosestValueGivenAuctionInThisModality(
+            double destinationValue,
+            double expected,
+            double[] bidsValues)
+        {
+            //Arranje
+            var modality = new ClosestSuperior(destinationValue);
+            var auction = new Auction("IPhone 13", modality);
+            var client1 = new Client("Felipe", auction);
+            var client2 = new Client("João", auction);
+            auction.StartTrading();
+
+            for (int i = 0; i < bidsValues.Length; i++)
+            {
+                if ((i % 2) == 0)
+                {
+                    auction.ReceiveBid(client1, bidsValues[i]);
+                }
+                else
+                {
+                    auction.ReceiveBid(client2, bidsValues[i]);
+                }
+            }
+
+            //Act
+            auction.EndTrading();
+
+
+            //Assert
+            var actual = auction.WinnerBid.Value;
+
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public void HighestValueGivenAnAuctionWith3Clients()
         {
             //Arranje
-            var auction = new Auction("IPhone 13");
+            var modality = new HighestValue();
+            var auction = new Auction("IPhone 13", modality);
             var client1 = new Client("Felipe", auction);
             var client2 = new Client("João", auction);
             var client3 = new Client("Maria", auction);
@@ -48,7 +88,8 @@ namespace Tests
         public void ThrowInvalidOperationExceptionGivenAuctionEndedAndNotStarted()
         {
             //Arranje
-            var auction = new Auction("PS5");
+            var modality = new HighestValue();
+            var auction = new Auction("PS5", modality);
 
             /* Forma "Gambiarra"
             try
@@ -68,7 +109,7 @@ namespace Tests
             var exception = Assert.Throws<InvalidOperationException>(
                 //Act
                 () => auction.EndTrading());
-            
+
             var actual = exception.Message;
             var expected = "Pregão deve ser iniciado antes";
             Assert.Equal(expected, actual);
@@ -82,14 +123,15 @@ namespace Tests
         public void HighestValueGivenAnAuction(double expected, double[] bidsValues)
         {
             //Arranje
-            var auction = new Auction("IPhone 13");
+            var modality = new HighestValue();
+            var auction = new Auction("IPhone 13", modality);
             var client1 = new Client("Felipe", auction);
             var client2 = new Client("João", auction);
             auction.StartTrading();
 
             for (int i = 0; i < bidsValues.Length; i++)
             {
-                if((i%2) == 0)
+                if ((i % 2) == 0)
                 {
                     auction.ReceiveBid(client1, bidsValues[i]);
                 }

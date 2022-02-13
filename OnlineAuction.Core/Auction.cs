@@ -1,34 +1,36 @@
-﻿namespace OnlineAuction.Core
+﻿using OnlineAuction.Core.EvaluationModality;
+
+namespace OnlineAuction.Core
 {
     public class Auction
     {
-        private IList<Bid> _bids;
-        private IAuctionState _auctionState { get; set; }
-
-        public IEnumerable<Bid> Bids => _bids;
-        public string Piece { get; }
+        public string Piece { get; set; }
+        public IList<Bid> Bids { get; set; }
         public Bid WinnerBid { get; set; }
+        private IAuctionState AuctionState { get; set; }
+        private IEvaluationModality EvaluationModality { get; set; }
 
-        public Auction(string piece)
+        public Auction(string piece, IEvaluationModality evaluationModality)
         {
             Piece = piece;
-            _auctionState = new NewAuction();
-            _bids = new List<Bid>();
+            Bids = new List<Bid>();
+            AuctionState = new NewAuction();
+            EvaluationModality = evaluationModality;
         }
 
         public void ReceiveBid(Client client, double value)
         {
-            _auctionState.ReceiveBid(this, client, value);
+            AuctionState.ReceiveBid(this, client, value);
         }
 
         public void StartTrading()
         {
-            _auctionState.StartTrading(this);
+            AuctionState.StartTrading(this);
         }
 
         public void EndTrading()
         {
-            _auctionState.EndTrading(this);
+            AuctionState.EndTrading(this);
         }
 
         interface IAuctionState
@@ -47,16 +49,16 @@
 
             public void ReceiveBid(Auction auction, Client client, double valor)
             {
-                if(!auction.Bids.Any() || client.Name != auction._bids.Last().Client.Name)
+                if (!auction.Bids.Any() || client.Name != auction.Bids.Last().Client.Name)
                 {
-                    auction._bids.Add(new Bid(client, valor));
+                    auction.Bids.Add(new Bid(client, valor));
                 }
             }
 
             public void EndTrading(Auction auction)
             {
-                auction.WinnerBid = auction.Bids.OrderBy(b => b.Value).LastOrDefault(new Bid(null, 0));
-                auction._auctionState = new ClosedAuction();
+                auction.WinnerBid = auction.EvaluationModality.Evaluate(auction);
+                auction.AuctionState = new ClosedAuction();
             }
         }
 
@@ -82,7 +84,7 @@
         {
             public void StartTrading(Auction auction)
             {
-                auction._auctionState = new OpenAuction();
+                auction.AuctionState = new OpenAuction();
             }
 
             public void ReceiveBid(Auction auction, Client client, double valor)

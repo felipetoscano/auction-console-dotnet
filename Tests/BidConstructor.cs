@@ -1,9 +1,6 @@
 ﻿using OnlineAuction.Core;
+using OnlineAuction.Core.EvaluationModality;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Tests
@@ -14,7 +11,8 @@ namespace Tests
         public void ThrowsArgumentExceptionGivenNegativeValue()
         {
             //Arranje
-            var auction = new Auction("Carro");
+            var modality = new HighestValue();
+            var auction = new Auction("Carro", modality);
             var client = new Client("João", auction);
 
             //Assert
