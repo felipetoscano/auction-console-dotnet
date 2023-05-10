@@ -1,4 +1,4 @@
-# online-auction
+# Leilão Online
 Projeto em C# que gerencia leilões, utilizando o padrão state e com a implementação de testes unitários com xUnit
 
 Algumas informações úteis para a criação de testes:
